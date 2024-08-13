@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sqlite/common/manager/font_manager.dart';
-import 'package:flutter_sqlite/common/manager/route_manager.dart';
-import 'package:flutter_sqlite/model/note.dart';
+import 'package:flutter_isar/common/manager/font_manager.dart';
+import 'package:flutter_isar/common/manager/route_manager.dart';
+import 'package:flutter_isar/model/note.dart';
 
 class NoteCard extends StatelessWidget {
   const NoteCard({
     super.key,
-    required this.note,
     required this.color,
+    required this.note,
   });
 
-  final Note note;
   final Color color;
+  final Note note;
 
   @override
   Widget build(BuildContext context) {

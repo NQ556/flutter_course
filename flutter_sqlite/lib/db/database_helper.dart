@@ -5,16 +5,9 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
-  DatabaseHelper._internal();
-  static Database? _database;
-
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    } else {
-      _database = await _initDatabase();
-      return _database!;
-    }
+  late Future<Database> database;
+  DatabaseHelper._internal() {
+    database = _initDatabase();
   }
 
   Future<Database> _initDatabase() async {

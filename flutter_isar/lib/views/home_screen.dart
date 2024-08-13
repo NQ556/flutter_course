@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sqlite/db/database_helper.dart';
-import 'package:flutter_sqlite/common/manager/color_manager.dart';
-import 'package:flutter_sqlite/common/manager/font_manager.dart';
-import 'package:flutter_sqlite/common/manager/route_manager.dart';
-import 'package:flutter_sqlite/common/manager/string_manager.dart';
-import 'package:flutter_sqlite/model/note.dart';
-import 'package:flutter_sqlite/views/widgets/note_card.dart';
-import 'package:flutter_sqlite/views/widgets/rounded_button.dart';
+import 'package:flutter_isar/common/database_helper.dart';
+import 'package:flutter_isar/common/manager/color_manager.dart';
+import 'package:flutter_isar/common/manager/font_manager.dart';
+import 'package:flutter_isar/common/manager/route_manager.dart';
+import 'package:flutter_isar/common/manager/string_manager.dart';
+import 'package:flutter_isar/model/note.dart';
+import 'package:flutter_isar/views/widgets/note_card.dart';
+import 'package:flutter_isar/views/widgets/rounded_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,10 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ColorManager.color_5,
   ];
 
-  Future<void> loadNotes() async {
+  Future<void> _loadNotes() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
-    databaseHelper.loadNotes();
     final result = await databaseHelper.loadNotes();
+
     setState(() {
       notes = result;
     });
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    loadNotes();
+    _loadNotes();
     super.initState();
   }
 
@@ -71,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       left: 20,
                     ),
                     child: NoteCard(
-                      note: notes[index],
                       color: colors[index % colors.length],
+                      note: notes[index],
                     ),
                   );
                 },
