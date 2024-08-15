@@ -12,11 +12,14 @@ class NoteCubit extends Cubit<NoteState> {
 
   Future<void> loadNotes() async {
     try {
-      final notes = await databaseHelper.loadNotes();
-      emit(
-        GetNotesState(
-          notes: notes,
-        ),
+      databaseHelper.noteStream.listen(
+        (notes) {
+          emit(
+            GetNotesState(
+              notes: notes,
+            ),
+          );
+        },
       );
     } catch (e) {
       emit(

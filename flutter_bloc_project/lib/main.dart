@@ -7,10 +7,10 @@ import 'package:flutter_bloc_project/views/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
+  final databaseHelper = DatabaseHelper();
   runApp(BlocProvider(
     create: (_) => NoteCubit(
-      DatabaseHelper(),
+      databaseHelper,
     ),
     child: const MyApp(),
   ));

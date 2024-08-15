@@ -1,6 +1,7 @@
 import 'package:flutter_bloc_project/model/note.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -8,7 +9,13 @@ class DatabaseHelper {
   late Future<Isar> database;
   DatabaseHelper._internal() {
     database = _init();
+    loadNotes();
   }
+
+  final BehaviorSubject<List<Note>> _noteStreamController =
+      BehaviorSubject<List<Note>>();
+
+  Stream<List<Note>> get noteStream => _noteStreamController.stream;
 
   Future<Isar> _init() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -18,23 +25,26 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> addNote(Note note) async {
+  Future<void> loadNotes() async {
     try {
       final isar = await database;
-      await isar.writeTxn(() {
-        return isar.notes.put(note);
-      });
+      final notes = await isar.notes.where().findAll();
+      _noteStreamController.add(notes);
     } catch (e) {
-      throw Exception(e.toString());
+      _noteStreamController.add([]);
     }
   }
 
-  Future<List<Note>> loadNotes() async {
+  Future<void> addNote(Note note) async {
     try {
       final isar = await database;
-      return isar.notes.where().findAll();
+      await isar.writeTxn(() async {
+        await isar.notes.put(note);
+      });
+
+      loadNotes();
     } catch (e) {
-      return [];
+      throw Exception(e.toString());
     }
   }
 
@@ -42,10 +52,16 @@ class DatabaseHelper {
     try {
       final isar = await database;
       await isar.writeTxn(() async {
-        return await isar.notes.delete(id);
+        await isar.notes.delete(id);
       });
+
+      loadNotes();
     } catch (e) {
       throw Exception();
     }
+  }
+
+  void dispose() {
+    _noteStreamController.close();
   }
 }
