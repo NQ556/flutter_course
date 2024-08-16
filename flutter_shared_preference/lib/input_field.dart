@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+
+class InputField extends StatelessWidget {
+  const InputField({
+    super.key,
+    required this.hintText,
+    required this.textEditingController,
+  });
+
+  final String hintText;
+  final TextEditingController textEditingController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: textEditingController,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 18,
+        ),
+      ),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "$hintText is missing!";
+        }
+        return null;
+      },
+      style: const TextStyle(
+        fontSize: 18,
+      ),
+    );
+  }
+}
